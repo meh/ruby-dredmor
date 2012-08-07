@@ -32,6 +32,12 @@ class Dredmor
 	autoload :Spells, 'dredmor/spells'
 
 	class Expansion < Dredmor
+		ByNumber = {
+			1 => 'Real of the Diggle Gods',
+			2 => 'You Have To Name The Expansion Pack',
+			3 => 'Conquest of the Wizardlands'
+		}
+
 		attr_reader :game, :name, :path
 
 		def initialize (game, name, path)
@@ -40,8 +46,18 @@ class Dredmor
 			@path = path
 		end
 
-		def paths
-			game.paths + [path]
+		def read_icon (name)
+			["#{path}/#{name}.png", "#{game.path}/#{name}.png"].each {|path|
+				next unless File.readable?(path)
+
+				file = File.new(name, 'r:binary')
+				icon = Icon.new(file.read, "#{path}/#{name}.png")
+				file.close
+
+				return file
+			}
+
+			nil
 		end
 
 		def inspect
@@ -49,23 +65,99 @@ class Dredmor
 		end
 	end
 
-	attr_reader :path, :expansions
+	class Mod < Dredmor
+		attr_reader :game, :name, :version, :description, :author, :requires
 
-	def initialize (path)
-		@path       = File.expand_path(path)
-		@expansions = Dir["#@path/expansion*"].map {|path|
-			name = case File.basename(path)
-				when 'expansion'  then 'Realm of the Diggle Gods'
-				when 'expansion2' then 'You Have To Name The Expansion Pack'
-				when 'expansion3' then 'Conquest of the Wizardlands'
-			end or next
+		def initialize (game, path)
+			@game = game
+			@path = path
 
-			Expansion.new(self, name, path)
-		}.compact
+			if @path.end_with? '.zip'
+				@zip = Zip::ZipFile.new(path)
+			end
+
+			read_xml('mod').tap {|xml|
+				@name        = xml.at('name')[:text]
+				@version     = xml.at('revision')[:text]
+				@description = xml.at('description')[:text]
+
+				xml.xpath('.//require').each {|element|
+					@requires.push(Expansion::ByNumber[element[:expansion].to_i])
+				}
+			}
+		end
+
+		def read_xml (name)
+			Nokogiri::XML.parse(read("mod/#{name}.xml"))
+		rescue
+			nil
+		end
+
+		def read_icon (name)
+			Icon.new(read("#{name}.png", :binary), "#{name}.png")
+		rescue
+			nil
+		end
+
+		def zip?
+			!!@zip
+		end
+
+		def read (name, encoding = false)
+			if @zip
+				@zip.entries {|z|
+					return z.get_input_stream.read if z.to_s == name
+				}
+			else
+				File.open(name, "r#{":#{encoding}" if encoding}") {|f|
+					return f.read
+				}
+			end
+
+			nil
+		end
+
+		private :read
 	end
 
-	def paths
-		[path]
+	attr_reader :path, :expansions, :mods
+
+	def initialize (path, mod_path = nil)
+		@path = File.expand_path(path)
+
+		@expansions = Dir["#@path/expansion*"].map {|path|
+			Expansion.new(self, Expansion::ByNumber[(File.basename(path)[/\d+$/] || 1).to_i], path)
+		}.compact.freeze
+
+		@mods = mod_path ? Dir["#{mod_path}/*"].map {|path|
+			Mod.new(self, path)
+		}.compact.freeze : []
+	end
+
+	def read_xml (name)
+		Nokogiri::XML.parse(File.read("#{path}/game/#{name}.xml"))
+	rescue
+		nil
+	end
+
+	def read_icon (name)
+		path = "#{path}/#{name}.png"
+
+		file = File.new(name, 'r:binary')
+		icon = Icon.new(file.read, "#{path}/#{name}.png")
+		file.close
+
+		icon
+	rescue
+		nil
+	end
+
+	def read_animation (name)
+		raise NotImplementedError
+	end
+
+	def read_sprite (name)
+		raise NotImplementedError
 	end
 
 	%w[items craftings encrustings monsters skills spells].each {|name|

@@ -14,20 +14,23 @@ class Spell
 	attr_reader :game, :type, :name, :description, :says, :icon
 
 	def initialize (game, xml)
-		@game = spells.game
+		@game = game
 
-		@type        = xml[:type].to_sym
-		@name        = xml[:name]
-		@description = xml.xpath('.//description[1]/@text').first.value
-		@says        = xml.xpath('.//description[1]/@monsterText').first.value rescue nil
+		@type = xml[:type].to_sym
+		@name = xml[:name]
+
+		if description = xml.at('description')
+			@description = description[:text]
+			@says        = description[:monsterText]
+		end
 
 		if xml[:icon]
-			@icon = Icon.load(game, xml[:icon])
+			@icon = game.read_icon(xml[:icon])
 		end
 	end
 
 	def inspect
-		"#<Dredmor::Spell(#{name}, #{type}): #{description.inspect}>"
+		"#<Dredmor::Spell(#{name})[#{type}]: #{description.inspect}>"
 	end
 end
 

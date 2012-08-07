@@ -23,7 +23,7 @@ class Skills
 		@game   = game
 		@skills = []
 
-		Nokogiri::XML.parse(File.read("#{game.path}/game/skillDB.xml")).xpath('//skill').each {|xml|
+		game.read_xml('skillDB').xpath('//skill').each {|xml|
 			@skills << Skill.new(game, xml)
 		}
 	end
@@ -33,7 +33,7 @@ class Skills
 	end
 
 	def [] (name_or_id)
-		find { |s| s.id == name_or_id || s.name == name_or_id }
+		find { |s| name_or_id === s.id || name_or_id === s.name }
 	end
 end
 

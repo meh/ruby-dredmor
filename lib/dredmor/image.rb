@@ -11,18 +11,10 @@
 class Dredmor
 
 class Image
-	def self.load (game, path)
-		path = game.paths.map { |p| "#{p}/#{path}" }.find { |p| File.readable?(p) }
-
-		File.open(path, 'r:binary') {|f|
-			break new(f.read, path)
-		}
-	end
-
 	attr_reader :path
 
 	def initialize (data, path = nil)
-		@data = data
+		@data = data.freeze
 		@path = path
 	end
 

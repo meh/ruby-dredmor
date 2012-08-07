@@ -13,7 +13,7 @@ class Dredmor; class Skills
 class Skill
 	include Enumerable
 
-	attr_reader :game, :id, :type, :name, :description, :ability, :icon
+	attr_reader :game, :id, :type, :name, :description, :ability, :inventory, :icon
 
 	def initialize (game, xml)
 		@game = game
@@ -23,12 +23,16 @@ class Skill
 		@name        = xml[:name]
 		@description = xml[:description]
 
-		@ability   = Ability.new(self, xml.xpath("//ability[@skill='#@id' and (@startSkill or @startskill)]").first)
+		@ability   = Ability.new(self, xml.at_xpath("//ability[@skill='#@id' and (@startSkill or @startskill)]"))
 		@abilities = xml.xpath("//ability[@skill='#@id' and not(@startSkill or @startskill)]").map {|xml|
 			Ability.new(self, xml)
 		}.sort_by(&:level)
 
-		@icon = Icon.load(game, xml.xpath('.//art/@icon').first.value)
+		@inventory = xml.xpath('./loadout').map {|xml|
+			Inventory.new(self, xml)
+		}
+
+		@icon = game.read_icon xml.at('art')[:icon]
 	end
 
 	def each (&block)

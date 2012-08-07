@@ -75,7 +75,7 @@ class Damage < Buff
 			super
 
 			@armor = true
-			@icon  = Icon.load(game, 'ui/icons/dmg_crushing.png')
+			@icon  = game.read_icon 'ui/icons/dmg_crushing'
 		end
 	end
 
@@ -84,7 +84,7 @@ class Damage < Buff
 			super
 
 			@armor = true
-			@icon  = Icon.load(game, 'ui/icons/dmg_slashing.png')
+			@icon  = game.read_icon 'ui/icons/dmg_slashing'
 		end
 	end
 
@@ -92,7 +92,7 @@ class Damage < Buff
 		def initialize (*)
 			super
 
-			@icon = Icon.load(game, 'ui/icons/dmg_piercing.png')
+			@icon = game.read_icon 'ui/icons/dmg_piercing'
 		end
 	end
 
@@ -101,7 +101,7 @@ class Damage < Buff
 			super
 
 			@armor = true
-			@icon  = Icon.load(game, 'ui/icons/dmg_blast.png')
+			@icon  = game.read_icon 'ui/icons/dmg_blast'
 		end
 	end
 
@@ -109,7 +109,7 @@ class Damage < Buff
 		def initialize (*)
 			super
 
-			@icon = Icon.load(game, 'ui/icons/dmg_hyperborean.png')
+			@icon = game.read_icon 'ui/icons/dmg_hyperborean'
 		end
 	end
 
@@ -117,7 +117,7 @@ class Damage < Buff
 		def initialize (*)
 			super
 
-			@icon = Icon.load(game, 'ui/icons/dmg_conflagratory.png')
+			@icon = game.read_icon 'ui/icons/dmg_conflagratory'
 		end
 	end
 
@@ -125,7 +125,7 @@ class Damage < Buff
 		def initialize (*)
 			super
 
-			@icon = Icon.load(game, 'ui/icons/dmg_voltaic.png')
+			@icon = game.read_icon 'ui/icons/dmg_voltaic'
 		end
 	end
 
@@ -133,7 +133,7 @@ class Damage < Buff
 		def initialize (*)
 			super
 
-			@icon = Icon.load(game, 'ui/icons/dmg_toxic.png')
+			@icon = game.read_icon 'ui/icons/dmg_toxic'
 		end
 	end
 
@@ -141,7 +141,7 @@ class Damage < Buff
 		def initialize (*)
 			super
 
-			@icon = Icon.load(game, 'ui/icons/dmg_righteous.png')
+			@icon = game.read_icon 'ui/icons/dmg_righteous'
 		end
 	end
 
@@ -149,7 +149,7 @@ class Damage < Buff
 		def initialize (*)
 			super
 
-			@icon = Icon.load(game, 'ui/icons/dmg_necromatic.png')
+			@icon = game.read_icon 'ui/icons/dmg_necromatic'
 		end
 	end
 	
@@ -157,7 +157,7 @@ class Damage < Buff
 		def initialize (*)
 			super
 
-			@icon = Icon.load(game, 'ui/icons/dmg_acidic.png')
+			@icon = game.read_icon 'ui/icons/dmg_acidic'
 		end
 	end
 
@@ -165,7 +165,7 @@ class Damage < Buff
 		def initialize (*)
 			super
 
-			@icon = Icon.load(game, 'ui/icons/dmg_putrefying.png')
+			@icon = game.read_icon 'ui/icons/dmg_putrefying'
 		end
 	end
 
@@ -173,7 +173,7 @@ class Damage < Buff
 		def initialize (*)
 			super
 
-			@icon = Icon.load(game, 'ui/icons/dmg_transmutative.png')
+			@icon = game.read_icon 'ui/icons/dmg_transmutative'
 		end
 	end
 
@@ -181,7 +181,7 @@ class Damage < Buff
 		def initialize (*)
 			super
 
-			@icon = Icon.load(game, 'ui/icons/dmg_aethereal.png')
+			@icon = game.read_icon 'ui/icons/dmg_aethereal'
 		end
 	end
 
@@ -189,7 +189,7 @@ class Damage < Buff
 		def initialize (*)
 			super
 
-			@icon = Icon.load(game, 'ui/icons/dmg_asphyxiative.png')
+			@icon = game.read_icon 'ui/icons/dmg_asphyxiative'
 		end
 	end
 
@@ -197,7 +197,7 @@ class Damage < Buff
 		def initialize (*)
 			super
 
-			@icon = Icon.load(game, 'ui/icons/dmg_existential.png')
+			@icon = game.read_icon 'ui/icons/dmg_existential'
 		end
 	end
 end

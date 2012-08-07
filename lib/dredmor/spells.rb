@@ -22,7 +22,7 @@ class Spells
 		@game   = game
 		@spells = []
 
-		Nokogiri::XML.parse(File.read("#{game.path}/game/spellDB.xml")).xpath('//spell').each {|xml|
+		game.read_xml('spellDB').xpath('//spell').each {|xml|
 			@spells << Spell.new(game, xml)
 		}
 	end
@@ -32,7 +32,7 @@ class Spells
 	end
 
 	def [] (name)
-		find { |s| s.name == name }
+		find { |s| name === s.name }
 	end
 end
 

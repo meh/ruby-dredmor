@@ -75,7 +75,7 @@ class Resistance < Buff
 			super
 
 			@armor = true
-			@icon  = Icon.load(game, 'ui/icons/dmg_crushing_resist.png')
+			@icon  = game.read_icon 'ui/icons/dmg_crushing_resist'
 		end
 	end
 
@@ -84,7 +84,7 @@ class Resistance < Buff
 			super
 
 			@armor = true
-			@icon  = Icon.load(game, 'ui/icons/dmg_slashing_resist.png')
+			@icon  = game.read_icon 'ui/icons/dmg_slashing_resist'
 		end
 	end
 
@@ -92,7 +92,7 @@ class Resistance < Buff
 		def initialize (*)
 			super
 
-			@icon = Icon.load(game, 'ui/icons/dmg_piercing_resist.png')
+			@icon = game.read_icon 'ui/icons/dmg_piercing_resist'
 		end
 	end
 
@@ -101,7 +101,7 @@ class Resistance < Buff
 			super
 
 			@armor = true
-			@icon  = Icon.load(game, 'ui/icons/dmg_blast_resist.png')
+			@icon  = game.read_icon 'ui/icons/dmg_blast_resist'
 		end
 	end
 
@@ -109,7 +109,7 @@ class Resistance < Buff
 		def initialize (*)
 			super
 
-			@icon = Icon.load(game, 'ui/icons/dmg_hyperborean_resist.png')
+			@icon = game.read_icon 'ui/icons/dmg_hyperborean_resist'
 		end
 	end
 
@@ -117,7 +117,7 @@ class Resistance < Buff
 		def initialize (*)
 			super
 
-			@icon = Icon.load(game, 'ui/icons/dmg_conflagratory_resist.png')
+			@icon = game.read_icon 'ui/icons/dmg_conflagratory_resist'
 		end
 	end
 
@@ -125,7 +125,7 @@ class Resistance < Buff
 		def initialize (*)
 			super
 
-			@icon = Icon.load(game, 'ui/icons/dmg_voltaic_resist.png')
+			@icon = game.read_icon 'ui/icons/dmg_voltaic_resist'
 		end
 	end
 
@@ -133,7 +133,7 @@ class Resistance < Buff
 		def initialize (*)
 			super
 
-			@icon = Icon.load(game, 'ui/icons/dmg_toxic_resist.png')
+			@icon = game.read_icon 'ui/icons/dmg_toxic_resist'
 		end
 	end
 
@@ -141,7 +141,7 @@ class Resistance < Buff
 		def initialize (*)
 			super
 
-			@icon = Icon.load(game, 'ui/icons/dmg_righteous_resist.png')
+			@icon = game.read_icon 'ui/icons/dmg_righteous_resist'
 		end
 	end
 
@@ -149,7 +149,7 @@ class Resistance < Buff
 		def initialize (*)
 			super
 
-			@icon = Icon.load(game, 'ui/icons/dmg_necromatic_resist.png')
+			@icon = game.read_icon 'ui/icons/dmg_necromatic_resist'
 		end
 	end
 	
@@ -157,7 +157,7 @@ class Resistance < Buff
 		def initialize (*)
 			super
 
-			@icon = Icon.load(game, 'ui/icons/dmg_acidic_resist.png')
+			@icon = game.read_icon 'ui/icons/dmg_acidic_resist'
 		end
 	end
 
@@ -165,7 +165,7 @@ class Resistance < Buff
 		def initialize (*)
 			super
 
-			@icon = Icon.load(game, 'ui/icons/dmg_putrefying_resist.png')
+			@icon = game.read_icon 'ui/icons/dmg_putrefying_resist'
 		end
 	end
 
@@ -173,7 +173,7 @@ class Resistance < Buff
 		def initialize (*)
 			super
 
-			@icon = Icon.load(game, 'ui/icons/dmg_transmutative_resist.png')
+			@icon = game.read_icon 'ui/icons/dmg_transmutative_resist'
 		end
 	end
 
@@ -181,7 +181,7 @@ class Resistance < Buff
 		def initialize (*)
 			super
 
-			@icon = Icon.load(game, 'ui/icons/dmg_aethereal_resist.png')
+			@icon = game.read_icon 'ui/icons/dmg_aethereal_resist'
 		end
 	end
 
@@ -189,7 +189,7 @@ class Resistance < Buff
 		def initialize (*)
 			super
 
-			@icon = Icon.load(game, 'ui/icons/dmg_asphyxiative_resist.png')
+			@icon = game.read_icon 'ui/icons/dmg_asphyxiative_resist'
 		end
 	end
 
@@ -197,7 +197,7 @@ class Resistance < Buff
 		def initialize (*)
 			super
 
-			@icon = Icon.load(game, 'ui/icons/dmg_existential_resist.png')
+			@icon = game.read_icon 'ui/icons/dmg_existential_resist'
 		end
 	end
 end

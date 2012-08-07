@@ -11,10 +11,23 @@
 class Dredmor; class Skills
 
 class Inventory
-	attr_reader :skill
+	attr_reader :game, :skill, :item, :amount
 
-	def initialize (skill, xml, path)
+	def initialize (skill, xml)
+		@game  = skill.game
 		@skill = skill
+
+		@always = xml[:always] == '1'
+		@item   = game.items[xml[:subtype]]
+		@amount = (xml[:amount] || 1).to_i
+	end
+
+	def always?
+		@always
+	end
+
+	def inspect
+		"#<Dredmor::Skill::Inventory(#{item.inspect}): #{always? ? 'always' : 'sometimes'} #{amount}>"
 	end
 end
 

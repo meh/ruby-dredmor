@@ -62,7 +62,7 @@ class Burliness < Primary
 	def initialize (*)
 		super
 
-		@icon      = Icon.load(game, 'ui/icons/stat_burliness.png')
+		@icon      = game.read_icon 'ui/icons/stat_burliness'
 		@secondary = [Health.new(game, to_f * 1), MeleePower.new(game, to_f * 0.33), Block.new(game, to_f * 0.16)]
 	end
 end
@@ -71,7 +71,7 @@ class Sagacity < Primary
 	def initialize (*)
 		super
 
-		@icon      = Icon.load(game, 'ui/icons/stat_sagacity.png')
+		@icon      = game.read_icon 'ui/icons/stat_sagacity'
 		@secondary = [Mana.new(game, to_f * 2), MagicPower.new(game, to_f * 0.5)]
 	end
 end
@@ -80,7 +80,7 @@ class Nimbleness < Primary
 	def initialize (*)
 		super
 
-		@icon      = Icon.load(game, 'ui/icons/stat_nimbleness.png')
+		@icon      = game.read_icon 'ui/icons/stat_nimbleness'
 		@secondary = [Dodge.new(game, to_f * 0.5), EnemyDodgeReduction.new(game, to_f * 0.33), Counter.new(game, to_f * 0.16), Sneakiness.new(game, to_f * 0.75)]
 	end
 end
@@ -89,7 +89,7 @@ class Caddishness < Primary
 	def initialize (*)
 		super
 
-		@icon      = Icon.load(game, 'ui/icons/stat_caddishness.png')
+		@icon      = game.read_icon 'ui/icons/stat_caddishness'
 		@secondary = [Health.new(game, to_f * 1), Critical.new(game, to_f * 0.5), Counter.new(game, to_f * 0.16)]
 	end
 end
@@ -98,7 +98,7 @@ class Stubborness < Primary
 	def initialize (*)
 		super
 
-		@icon      = Icon.load(game, 'ui/icons/stat_stubborness.png')
+		@icon      = game.read_icon 'ui/icons/stat_stubborness'
 		@secondary = [MagicResistance.new(game, to_f * 0.5), Block.new(game, to_f * 0.16)]
 	end
 end
@@ -107,7 +107,7 @@ class Savvy < Primary
 	def initialize (*)
 		super
 
-		@icon      = Icon.load(game, 'ui/icons/stat_savvy.png')
+		@icon      = game.read_icon 'ui/icons/stat_savvy'
 		@secondary = [Haywire.new(game, to_f * 0.5), Sneakiness.new(game, to_f * 0.75)]
 	end
 end

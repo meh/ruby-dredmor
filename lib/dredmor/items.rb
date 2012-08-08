@@ -9,6 +9,8 @@
 #++
 
 require 'dredmor/items/item'
+require 'dredmor/items/lockpick'
+
 require 'dredmor/items/food'
 require 'dredmor/items/potion'
 require 'dredmor/items/mushroom'
@@ -18,7 +20,7 @@ require 'dredmor/items/weapon'
 require 'dredmor/items/wand'
 require 'dredmor/items/armour'
 require 'dredmor/items/toolkit'
-require 'dredmor/items/lockpick'
+require 'dredmor/items/reagent'
 
 class Dredmor
 
@@ -39,7 +41,8 @@ class Items
 		@wands     = []
 		@armours   = []
 		@toolkits  = []
-		@items     = []
+		@reagents  = []
+		@misc      = []
 
 		game.read_xml('itemDB').xpath('//item').each {|xml|
 			if xml.at('food')
@@ -61,20 +64,20 @@ class Items
 			elsif xml.at('toolkit')
 				@toolkits << Toolkit.new(game, xml)
 			else
-				@items << Item.new(game, xml)
+				@reagents << Reagent.new(game, xml)
 			end
 		}
 
-		@items << Lockpick.new(game)
+		@misc << Lockpick.new(game)
 	end
 
 	def each (what = nil, &block)
 		return enum_for :each, what unless block
 
 		if what
-			instance_variable_get("@#{what}s").each(&block)
+			(instance_variable_get("@#{what}s") || instance_variable_get("@#{what}")).each(&block)
 		else
-			each(:item, &block)
+			each(:reagent, &block)
 			each(:food, &block)
 			each(:mushroom, &block)
 			each(:gem, &block)
@@ -83,19 +86,20 @@ class Items
 			each(:wand, &block)
 			each(:armour, &block)
 			each(:toolkit, &block)
+			each(:misc, &block)
 		end
 
 		self
 	end
 
-	%w[food potion mushroom gem trap weapon wand armour toolkit].each {|name|
+	%w[food potion mushroom gem trap weapon wand armour toolkit reagent].each {|name|
 		define_method "#{name}s" do |&block|
 			each(name, &block)
 		end
 	}
 
-	def [] (name)
-		find { |i| name === i.name }
+	def misc (&block)
+		each(:misc, &block)
 	end
 end
 
@@ -108,5 +112,8 @@ Trap     = Items::Trap
 Weapon   = Items::Weapon
 Wand     = Items::Wand
 Armour   = Items::Armour
+Toolkit  = Items::Toolkit
+Reagent  = Items::Reagent
+Lockpick = Items::Lockpick
 
 end

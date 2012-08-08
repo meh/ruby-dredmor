@@ -11,11 +11,12 @@
 class Dredmor; class Spells
 
 class Probability
-	attr_reader :spell
+	attr_reader :spell, :after
 
-	def initialize (spell, percentage)
+	def initialize (spell, percentage, after = 0)
 		@spell      = spell
 		@percentage = percentage.to_i
+		@after      = after
 	end
 
 	def to_i
@@ -27,7 +28,7 @@ class Probability
 	end
 
 	def inspect
-		"#<Dredmor::Probability(#{to_i}%): #{spell.inspect}>"
+		"#<Dredmor::Probability(#{to_i}%#{", after #{after}" if after}): #{spell.inspect}>"
 	end
 end
 

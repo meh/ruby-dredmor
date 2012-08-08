@@ -11,6 +11,21 @@
 class Dredmor; class Items
 
 class Toolkit < Item
+	attr_reader :type
+
+	def initialize (game, xml)
+		super
+
+		@type = xml.at('toolkit')[:tag].to_sym
+	end
+
+	def craftings (&block)
+		game.craftings.each(type, &block)
+	end
+
+	def encrustings (&block)
+		game.encrustings.each(type, &block)
+	end
 end
 
 end; end

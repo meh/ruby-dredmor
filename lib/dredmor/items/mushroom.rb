@@ -11,6 +11,13 @@
 class Dredmor; class Items
 
 class Mushroom < Item
+	attr_reader :effect
+
+	def initialize (game, xml)
+		super
+
+		@effect = game.spells[xml.at('casts')[:spell]]
+	end
 end
 
 end; end

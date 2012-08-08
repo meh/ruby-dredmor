@@ -11,6 +11,24 @@
 class Dredmor; class Items
 
 class Food < Item
+	Heals = Struct.new(:health, :mana)
+
+	attr_reader :heals, :effect
+
+	def initialize (game, xml)
+		super
+
+		@heals = Heals.new(xml.at('food')[:hp].to_i, xml.at('food')[:mp].to_i).freeze
+		@vegan = xml.at('food')[:meat] != '1'
+
+		if effect = xml.at('food')[:effect]
+			@effect = game.spells[effect]
+		end
+	end
+
+	def vegan?
+		@vegan
+	end
 end
 
 end; end

@@ -19,14 +19,25 @@ class Item
 		@name        = xml[:name]
 		@description = xml.at('description')[:text]
 		@price       = xml.at('price')[:amount].to_i rescue 0
+		@special     = xml[:special] == '1'
 
 		if xml[:iconFile]
 			@icon = game.read_icon xml[:iconFile]
 		end
 	end
 
+	protected :initialize
+
+	def special?
+		@special
+	end
+
+	def to_str
+		@name
+	end
+
 	def inspect
-		"#<Dredmor::Item(#{name}, #{price} zorkimnds): #{description.inspect}>"
+		"#<Dredmor::Item(#{name}, #{price} zorkimnds)#{": #{description.inspect}" if description}>"
 	end
 end
 

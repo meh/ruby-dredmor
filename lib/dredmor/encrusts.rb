@@ -10,11 +10,7 @@
 
 class Dredmor
 
-class Craftings
-	class Crafting
-
-	end
-
+class Encrusts
 	attr_reader :game
 
 	def initialize (game)

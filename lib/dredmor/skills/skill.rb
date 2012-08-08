@@ -43,6 +43,10 @@ class Skill
 		find { |s| s.level == name_or_level || s.name == name_or_level }
 	end
 
+	def to_str
+		@name
+	end
+
 	def inspect
 		"#<Dredmor::Skill(#{name}): #{description.inspect}>"
 	end

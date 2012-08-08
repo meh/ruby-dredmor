@@ -11,6 +11,14 @@
 class Dredmor; class Items
 
 class Wand < Item
+	attr_reader :charges, :effect
+
+	def initialize (game, xml)
+		super
+
+		@charges = Range.new(xml.at('wand')[:mincharge].to_i, xml.at('wand')[:maxcharge].to_i)
+		@effect  = game.spells[xml.at('wand')[:spell]]
+	end
 end
 
 end; end

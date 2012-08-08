@@ -14,7 +14,7 @@ class Lockpick < Item
 	def initialize (game)
 		@game = game
 
-		@name  = 'Lockpicks'
+		@name  = 'Lockpick'
 		@price = 4
 		@icon  = game.read_icon 'items/lockpick'
 	end

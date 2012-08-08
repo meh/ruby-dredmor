@@ -11,6 +11,13 @@
 class Dredmor; class Items
 
 class Potion < Item
+	attr_reader :effect
+
+	def initialize (game, xml)
+		super
+
+		@effect = game.spells[xml[:spell]]
+	end
 end
 
 end; end

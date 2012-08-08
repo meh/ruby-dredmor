@@ -8,18 +8,18 @@
 #  0. You just DO WHAT THE FUCK YOU WANT TO.
 #++
 
-class Dredmor
+class Dredmor; class Items
 
-class Encrustings
-	class Encrusting
+class Reagent < Item
+	def initialize (game, xml)
+		super
 
+		@in_vending_machines = xml[:alchemical] == '1'
 	end
 
-	attr_reader :game
-
-	def initialize (game)
-		@game = game
+	def in_vending_machines?
+		@in_vending_machines
 	end
 end
 
-end
+end; end

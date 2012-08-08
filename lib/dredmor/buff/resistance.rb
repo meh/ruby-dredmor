@@ -12,19 +12,30 @@ class Dredmor; class Buff
 
 class Resistance < Buff
 	include Enumerable
+	include Comparable
 
-	def initialize (game, xml)
-		@types = xml.attribute_nodes.map {|attr|
-			Type.new(game, attr.name, attr.value.to_f)
-		}
+	def initialize (game, xml = nil)
+		@types = []
+
+		if xml
+			xml.attribute_nodes.each {|attr|
+				begin
+					@types << Type.new(game, attr.name, attr.value.to_f)
+				rescue ArgumentError; end
+			}
+		end
 	end
 
 	def each (&block)
 		@types.each(&block)
 	end
 
+	def <=> (other)
+		to_f <=> other.to_f
+	end
+
 	def to_f
-		@types.map(&:to_f).inject(:+)
+		@types.map(&:to_f).reduce(0, :+)
 	end
 
 	def to_i
@@ -32,14 +43,24 @@ class Resistance < Buff
 	end
 
 	def inspect
-		"#<Dredmor::Resistance(#{map(&:name).join(', ')}): #{to_f}>"
+		if @types.empty?
+			"#<Dredmor::Resistance: it is futile>"
+		else
+			"#<Dredmor::Resistance(#{map(&:name).join(', ')}): #{to_f}>"
+		end
 	end
 
 	class Type
 		def self.new (game, *args)
 			return super unless self == Type
 
-			Resistance.const_get(args.first.to_sym.capitalize).new(game, args.last)
+			name, xml = args
+
+			unless const = Resistance.const_get(name.to_sym.capitalize) rescue false
+				raise ArgumentError, "#{name} unknown resistance type"
+			end
+			
+			const.new(game, xml)
 		end
 
 		attr_reader :game
@@ -67,6 +88,10 @@ class Resistance < Buff
 
 		def to_i
 			to_f.to_i
+		end
+
+		def inspect
+			"#<Dredmor::Resistance::#{name.capitalize}: #{to_f}>"
 		end
 	end
 

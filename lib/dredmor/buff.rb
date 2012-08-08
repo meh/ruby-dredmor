@@ -29,4 +29,7 @@ class Buff
 	end
 end
 
+Damage     = Buff::Damage
+Resistance = Buff::Resistance
+
 end

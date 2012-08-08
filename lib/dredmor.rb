@@ -12,17 +12,22 @@ require 'nokogiri'
 require 'base64'
 
 require 'dredmor/version'
+require 'dredmor/helpers'
 
 class Dredmor
+	autoload :Unified, 'dredmor/unified'
+
 	autoload :Image, 'dredmor/image'
 	autoload :Icon, 'dredmor/image'
 	autoload :Sprite, 'dredmor/image'
 
 	autoload :Buff, 'dredmor/buff'
+	autoload :Damage, 'dredmor/buff'
+	autoload :Resistance, 'dredmor/buff'
 
 	autoload :Items, 'dredmor/items'
-	autoload :Craftings, 'dredmor/craftings'
-	autoload :Encrustings, 'dredmor/encrustings'
+	autoload :Crafts, 'dredmor/crafts'
+	autoload :Encrusts, 'dredmor/encrusts'
 	autoload :Monsters, 'dredmor/monsters'
 
 	autoload :Skills, 'dredmor/skills'
@@ -31,7 +36,49 @@ class Dredmor
 
 	autoload :Spells, 'dredmor/spells'
 
-	class Expansion < Dredmor
+	class Core
+		attr_reader :game
+
+		def initialize (game)
+			@game = game
+		end
+
+		def read_xml (name)
+			Nokogiri::XML.parse(File.read("#{path}/game/#{name}.xml"))
+		rescue
+			nil
+		end
+
+		def read_icon (name)
+			path = "#{path}/#{name}.png"
+
+			file = File.new(name, 'r:binary')
+			icon = Icon.new(file.read, "#{path}/#{name}.png")
+			file.close
+
+			icon
+		rescue
+			nil
+		end
+
+		def read_animation (name)
+			raise NotImplementedError
+		end
+
+		def read_sprite (name)
+			raise NotImplementedError
+		end
+
+		%w[items crafts encrusts monsters skills spells].each {|name|
+			define_method name do
+				return instance_variable_get "@#{name}" if instance_variable_defined? "@#{name}"
+
+				instance_variable_set "@#{name}", Dredmor.const_get(name.capitalize).new(self)
+			end
+		}
+	end
+
+	class Expansion < Core
 		ByNumber = {
 			1 => 'Real of the Diggle Gods',
 			2 => 'You Have To Name The Expansion Pack',
@@ -50,8 +97,8 @@ class Dredmor
 			["#{path}/#{name}.png", "#{game.path}/#{name}.png"].each {|path|
 				next unless File.readable?(path)
 
-				file = File.new(name, 'r:binary')
-				icon = Icon.new(file.read, "#{path}/#{name}.png")
+				file = File.new(path, 'r:binary')
+				icon = Icon.new(file.read, path)
 				file.close
 
 				return file
@@ -65,7 +112,7 @@ class Dredmor
 		end
 	end
 
-	class Mod < Dredmor
+	class Mod < Core
 		attr_reader :game, :name, :version, :description, :author, :requires
 
 		def initialize (game, path)
@@ -124,6 +171,7 @@ class Dredmor
 
 	def initialize (path, mod_path = nil)
 		@path = File.expand_path(path)
+		@core = Core.new(self)
 
 		@expansions = Dir["#@path/expansion*"].map {|path|
 			Expansion.new(self, Expansion::ByNumber[(File.basename(path)[/\d+$/] || 1).to_i], path)
@@ -133,40 +181,6 @@ class Dredmor
 			Mod.new(self, path)
 		}.compact.freeze : []
 	end
-
-	def read_xml (name)
-		Nokogiri::XML.parse(File.read("#{path}/game/#{name}.xml"))
-	rescue
-		nil
-	end
-
-	def read_icon (name)
-		path = "#{path}/#{name}.png"
-
-		file = File.new(name, 'r:binary')
-		icon = Icon.new(file.read, "#{path}/#{name}.png")
-		file.close
-
-		icon
-	rescue
-		nil
-	end
-
-	def read_animation (name)
-		raise NotImplementedError
-	end
-
-	def read_sprite (name)
-		raise NotImplementedError
-	end
-
-	%w[items craftings encrustings monsters skills spells].each {|name|
-		define_method name do
-			return instance_variable_get "@#{name}" if instance_variable_defined? "@#{name}"
-
-			instance_variable_set "@#{name}", Dredmor.const_get(name.capitalize).new(self)
-		end
-	}
 
 	def inspect
 		"#<Dredmor#{"(#{expansions.map(&:name).join(', ')})" unless expansions.empty?}: #{path.inspect}>"

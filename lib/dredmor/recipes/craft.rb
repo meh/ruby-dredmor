@@ -16,11 +16,13 @@ class Craft < Recipe
 	def initialize (game, xml)
 		super
 
-		@result   = game.items.find { |i| i.name == xml.at('output')[:name] }
+		@name     = xml.at('output')[:name]
 		@required = Required.new(
 			xml.css('input').map { |x| game.items.find { |i| i.name == x[:name] } },
 			xml.at('output')[:skill].to_i
 		)
+
+		@result = game.items.find { |i| i.name == xml.at('output')[:name] }
 	end
 end
 

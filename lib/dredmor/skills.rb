@@ -23,9 +23,11 @@ class Skills
 		@game   = game
 		@skills = []
 
-		game.read_xml('skillDB').xpath('//skill').each {|xml|
-			@skills << Skill.new(game, xml)
-		}
+		if xml = game.read_xml('skillDB')
+			xml.xpath('//skill').each {|xml|
+				@skills << Skill.new(game, xml)
+			}
+		end
 	end
 
 	def each (&block)

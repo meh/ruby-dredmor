@@ -13,7 +13,7 @@ class Dredmor; class Recipes
 class Recipe
 	Required = Struct.new(:items, :level)
 
-	attr_reader :game, :toolkit, :required
+	attr_reader :game, :toolkit, :required, :name
 
 	def initialize (game, xml)
 		@game    = game

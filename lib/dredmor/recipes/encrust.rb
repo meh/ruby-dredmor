@@ -13,11 +13,12 @@ class Dredmor; class Crafts
 class Encrust < Recipe
 	include WithBuffs
 
-	attr_reader :result, :required, :instability, :power
+	attr_reader :result, :required, :instability, :power, :description, :encrust
 
 	def initialize (game, xml)
 		super
 
+		@name     = xml[:name]
 		@required = Required.new(
 			xml.css('input').map { |x| game.items.find { |i| i.name == x[:name] } },
 			xml.at('skill')[:level].to_i
@@ -31,6 +32,9 @@ class Encrust < Recipe
 		else
 			@chance = 100
 		end
+
+		@description = xml.at('description')[:text]
+		@encrust     = xml.at('encrustwith')[:name]
 	end
 end
 

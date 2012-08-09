@@ -44,31 +44,35 @@ class Items
 		@reagents  = []
 		@misc      = []
 
-		game.read_xml('itemDB').xpath('//item').each {|xml|
-			if xml.at('food')
-				@foods << Food.new(game, xml)
-			elsif xml.at('potion')
-				@potions << Potion.new(game, xml)
-			elsif xml.at('mushroom')
-				@mushrooms << Mushroom.new(game, xml)
-			elsif xml.at('gem')
-				@gems << Gem.new(game, xml)
-			elsif xml.at('trap')
-				@traps << Trap.new(game, xml)
-			elsif xml.at('weapon')
-				@weapons << Weapon.new(game, xml)
-			elsif xml.at('wand')
-				@wands << Wand.new(game, xml)
-			elsif xml.at('armour')
-				@armours << Armour.new(game, xml)
-			elsif xml.at('toolkit')
-				@toolkits << Toolkit.new(game, xml)
-			else
-				@reagents << Reagent.new(game, xml)
-			end
-		}
+		if xml = game.read_xml('itemDB')
+			xml.xpath('//item').each {|xml|
+				if xml.at('food')
+					@foods << Food.new(game, xml)
+				elsif xml.at('potion')
+					@potions << Potion.new(game, xml)
+				elsif xml.at('mushroom')
+					@mushrooms << Mushroom.new(game, xml)
+				elsif xml.at('gem')
+					@gems << Gem.new(game, xml)
+				elsif xml.at('trap')
+					@traps << Trap.new(game, xml)
+				elsif xml.at('weapon')
+					@weapons << Weapon.new(game, xml)
+				elsif xml.at('wand')
+					@wands << Wand.new(game, xml)
+				elsif xml.at('armour')
+					@armours << Armour.new(game, xml)
+				elsif xml.at('toolkit')
+					@toolkits << Toolkit.new(game, xml)
+				else
+					@reagents << Reagent.new(game, xml)
+				end
+			}
+		end
 
-		@misc << Lockpick.new(game)
+		if game.class == Dredmor::Core
+			@misc << Lockpick.new(game)
+		end
 	end
 
 	def each (what = nil, &block)

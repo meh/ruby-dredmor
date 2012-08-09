@@ -8,14 +8,23 @@
 #  0. You just DO WHAT THE FUCK YOU WANT TO.
 #++
 
-class Dredmor
+class Dredmor; class Powers
 
-class Encrusts
-	attr_reader :game
+class Power
+	attr_reader :game, :name, :description
 
-	def initialize (game)
+	def initialize (game, xml)
 		@game = game
+
+		@name        = xml[:name]
+		@description = xml[:description]
+		@effect      = game.spells[xml[:spell]]
+		@unstable    = xml.name == 'unstableEffect'
+	end
+
+	def unstable?
+		@unstable
 	end
 end
 
-end
+end; end

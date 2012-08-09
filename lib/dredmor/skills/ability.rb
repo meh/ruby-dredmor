@@ -13,7 +13,7 @@ class Dredmor; class Skills
 class Ability
 	include WithBuffs
 
-	attr_reader :game, :skill, :level, :name, :description, :icon, :spells
+	attr_reader :game, :skill, :level, :name, :description, :icon, :spells, :learn
 
 	def initialize (skill, xml)
 		@game  = skill.game
@@ -25,6 +25,10 @@ class Ability
 
 		@icon   = game.read_icon xml[:icon]
 		@spells = xml.css('spell').map { |x| game.spells[x[:name]] }
+
+		if recipe = xml[:learnrecipe]
+			@learn = game.recipes[recipe]
+		end
 
 		from_xml(xml)
 	end

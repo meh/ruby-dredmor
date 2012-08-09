@@ -10,25 +10,17 @@
 
 class Dredmor; class Crafts
 
-class Craft
-	Required = Struct.new(:items, :level)
-
-	attr_reader :game, :toolkit, :result, :required
+class Craft < Recipe
+	attr_reader :result
 
 	def initialize (game, xml)
-		@game    = game
-		@toolkit = game.items.toolkits.find { |t| t.type == xml.at('tool')[:tag].to_sym }
-		@result  = game.items.find { |i| i.name == xml.at('output')[:name] }
-		@secret  = xml[:hidden] == '1'
+		super
 
+		@result   = game.items.find { |i| i.name == xml.at('output')[:name] }
 		@required = Required.new(
 			xml.css('input').map { |x| game.items.find { |i| i.name == x[:name] } },
 			xml.at('output')[:skill].to_i
 		)
-	end
-
-	def secret?
-		@secret
 	end
 end
 

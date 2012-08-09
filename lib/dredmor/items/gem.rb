@@ -11,6 +11,7 @@
 class Dredmor; class Items
 
 class Gem < Item
+	public :initialize
 end
 
 end; end

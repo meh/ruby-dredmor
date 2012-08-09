@@ -8,11 +8,13 @@
 #  0. You just DO WHAT THE FUCK YOU WANT TO.
 #++
 
-require 'dredmor/crafts/craft'
+require 'dredmor/recipes/recipe'
+require 'dredmor/recipes/craft'
+require 'dredmor/recipes/encrust'
 
 class Dredmor
 
-class Crafts
+class Recipes
 	include Enumerable
 
 	attr_reader :game
@@ -21,9 +23,17 @@ class Crafts
 		@game  = game
 		@tools = Hash.new { |h,k| h[k] = [] }
 
-		game.read_xml('craftDB').xpath('//craft').each {|xml|
-			@tools[xml.at('tool')[:tag].to_sym] << Craft.new(game, xml)
-		}
+		if xml = game.read_xml('craftDB')
+			xml.xpath('//craft').each {|xml|
+				@tools[xml.at('tool')[:tag].to_sym] << Craft.new(game, xml)
+			}
+		end
+
+		if xml = game.read_xml('encrustDB')
+			xml.xpath('//encrust').each {|xml|
+				@tools[xml.at('tool')[:tag].to_sym] << Encrust.new(game, xml)
+			}
+		end
 	end
 
 	def each (name = nil, &block)
@@ -32,12 +42,16 @@ class Crafts
 		if name
 			@tools[name].each(&block)
 		else
-			@tools.each_value {|crafts|
-				crafts.each(&block)
+			@tools.each_value {|recipe|
+				recipe.each(&block)
 			}
 		end
 
 		self
+	end
+
+	def recipe_for (name)
+		find { |c| c.result.name == recipe }
 	end
 end
 

@@ -26,8 +26,8 @@ class Dredmor
 	autoload :Resistance, 'dredmor/buff'
 
 	autoload :Items, 'dredmor/items'
-	autoload :Crafts, 'dredmor/crafts'
-	autoload :Encrusts, 'dredmor/encrusts'
+	autoload :Powers, 'dredmor/powers'
+	autoload :Recipes, 'dredmor/recipes'
 	autoload :Monsters, 'dredmor/monsters'
 
 	autoload :Skills, 'dredmor/skills'
@@ -69,7 +69,7 @@ class Dredmor
 			raise NotImplementedError
 		end
 
-		%w[items crafts encrusts monsters skills spells].each {|name|
+		%w[items powers recipes monsters skills spells].each {|name|
 			define_method name do
 				return instance_variable_get "@#{name}" if instance_variable_defined? "@#{name}"
 
@@ -167,7 +167,7 @@ class Dredmor
 		private :read
 	end
 
-	attr_reader :path, :expansions, :mods
+	attr_reader :path, :core, :expansions, :mods
 
 	def initialize (path, mod_path = nil)
 		@path = File.expand_path(path)

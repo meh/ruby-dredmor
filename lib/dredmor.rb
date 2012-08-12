@@ -36,6 +36,7 @@ class Dredmor
 	autoload :Spells, 'dredmor/spells'
 	autoload :TargetAreas, 'dredmor/target_areas'
 	autoload :TextDatabase, 'dredmor/text_database'
+	autoload :Scrolls, 'dredmor/scrolls'
 
 	class Core
 		attr_reader :game
@@ -72,7 +73,7 @@ class Dredmor
 		def read_sprite (name)
 		end
 
-		%w[items powers recipes monsters skills spells target_areas text_database].each {|name|
+		%w[items powers recipes monsters skills spells target_areas text_database scrolls].each {|name|
 			define_method name do
 				return instance_variable_get "@#{name}" if instance_variable_defined? "@#{name}"
 
@@ -201,7 +202,7 @@ class Dredmor
 		self
 	end
 
-	%w[items powers recipes monsters skills spells target_areas text_database].each {|name|
+	%w[items powers recipes monsters skills spells target_areas text_database scrolls].each {|name|
 		define_method name do
 			return instance_variable_get "@#{name}" if instance_variable_defined? "@#{name}"
 

@@ -152,6 +152,20 @@ class TextDatabase
 	end
 end
 
-Tooltip = TextDatabase::Tooltip
+Tooltip      = TextDatabase::Tooltip
+Quality      = TextDatabase::Quality
+Material     = TextDatabase::Material
+Decoration   = TextDatabase::Decoration
+Phoneme      = TextDatabase::Phoneme
+Noun         = TextDatabase::Noun
+Adjective    = TextDatabase::Adjective
+Ichor        = TextDatabase::Ichor
+Insult       = TextDatabase::Insult
+Random       = TextDatabase::Random
+Verb         = TextDatabase::Verb
+Architecture = TextDatabase::Architecture
+FirstName    = TextDatabase::FirstName
+Title        = TextDatabase::Title
+WizardName   = TextDatabase::WizardName
 
 end

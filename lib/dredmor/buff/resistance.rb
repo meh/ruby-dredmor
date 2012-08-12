@@ -63,7 +63,7 @@ class Resistance < Buff
 			const.new(game, xml)
 		end
 
-		attr_reader :game
+		attr_reader :game, :icon
 
 		def initialize (game, amount)
 			@game = game
@@ -76,6 +76,10 @@ class Resistance < Buff
 
 		def name
 			self.class.name.downcase[/(?:::)?([^:]+)$/, 1].to_sym
+		end
+
+		def description
+			game.text_database!.tooltips.find { |t| t.panel == :resistances && t.name.to_sym == name }
 		end
 
 		def armor?

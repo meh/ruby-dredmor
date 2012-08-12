@@ -34,6 +34,8 @@ class Dredmor
 	autoload :Ability, 'dredmor/skills'
 
 	autoload :Spells, 'dredmor/spells'
+	autoload :TargetAreas, 'dredmor/target_areas'
+	autoload :TextDatabase, 'dredmor/text_database'
 
 	class Core
 		attr_reader :game
@@ -65,18 +67,16 @@ class Dredmor
 		end
 
 		def read_animation (name)
-			raise NotImplementedError
 		end
 
 		def read_sprite (name)
-			raise NotImplementedError
 		end
 
-		%w[items powers recipes monsters skills spells].each {|name|
+		%w[items powers recipes monsters skills spells target_areas text_database].each {|name|
 			define_method name do
 				return instance_variable_get "@#{name}" if instance_variable_defined? "@#{name}"
 
-				instance_variable_set "@#{name}", Dredmor.const_get(name.capitalize).new(self)
+				instance_variable_set "@#{name}", Dredmor.const_get(name.to_class_name).new(self)
 			end
 
 			define_method "#{name}!" do
@@ -135,20 +135,20 @@ class Dredmor
 				@version     = xml.at('revision')[:text]
 				@description = xml.at('description')[:text]
 
-				xml.xpath('.//require').each {|element|
+				xml.css('require').each {|element|
 					@requires.push(Expansion::ByNumber[element[:expansion].to_i])
 				}
 			}
 		end
 
 		def read_xml (name)
-			Nokogiri::XML.parse(read("mod/#{name}.xml"))
+			Nokogiri::XML.parse(read("mod/#{name[/^(.+?)(\.xml)?$/, 1]}.xml"))
 		rescue
 			nil
 		end
 
 		def read_icon (name)
-			Icon.new(read("#{name}.png", :binary), "#{name}.png")
+			Icon.new(read("#{name[/^(.+?)(\.png)?$/, 1]}.png", :binary), "#{name[/^(.+?)(\.png)?$/, 1]}.png")
 		rescue
 			nil
 		end
@@ -201,11 +201,11 @@ class Dredmor
 		self
 	end
 
-	%w[items powers recipes monsters skills spells].each {|name|
+	%w[items powers recipes monsters skills spells target_areas text_database].each {|name|
 		define_method name do
 			return instance_variable_get "@#{name}" if instance_variable_defined? "@#{name}"
 
-			instance_variable_set "@#{name}", Unified.const_get(name.capitalize).new(self)
+			instance_variable_set "@#{name}", Unified.const_get(name.to_class_name).new(self)
 		end
 
 		alias_method "#{name}!", name

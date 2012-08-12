@@ -70,3 +70,15 @@ module WithBuffs
 end
 
 end
+
+class String
+	def to_class_name
+		capitalize.gsub(/_(.)/) { |c| $1.upcase }
+	end
+end
+
+class Symbol
+	def to_class_name
+		to_s.to_class_name.to_sym
+	end
+end

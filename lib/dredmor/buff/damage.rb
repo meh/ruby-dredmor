@@ -63,7 +63,7 @@ class Damage < Buff
 			const.new(game, xml)
 		end
 
-		attr_reader :game
+		attr_reader :game, :icon
 
 		def initialize (game, amount)
 			@game = game
@@ -78,8 +78,12 @@ class Damage < Buff
 			self.class.name.downcase[/(?:::)?([^:]+)$/, 1].to_sym
 		end
 
+		def description
+			game.text_database!.tooltips.find { |t| t.panel == :damages && t.name.to_sym == name }
+		end
+
 		def armor?
-			@armor
+			!!@armor
 		end
 
 		def to_f

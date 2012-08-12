@@ -8,36 +8,35 @@
 #  0. You just DO WHAT THE FUCK YOU WANT TO.
 #++
 
-require 'dredmor/spells/spell'
-require 'dredmor/spells/probability'
+require 'dredmor/target_areas/target_area'
 
 class Dredmor
 
-class Spells
+class TargetAreas
 	include Enumerable
 
 	attr_reader :game
 
 	def initialize (game)
 		@game   = game
-		@spells = []
+		@areas = []
 
-		if xml = game.read_xml('spellDB')
-			xml.xpath('//spell').each {|xml|
-				@spells << Spell.new(game, xml)
+		if xml = game.read_xml('manTemplateDB')
+			xml.xpath('//template').each {|xml|
+				@areas << TargetArea.new(game, xml)
 			}
 		end
 	end
 
 	def each (&block)
-		@spells.each(&block)
+		@areas.each(&block)
 	end
 
-	def [] (name)
-		find { |s| name === s.name }
+	def [] (id)
+		find { |s| id === s.id }
 	end
 end
 
-Spell = Spells::Spell
+TargetArea = TargetAreas::TargetArea
 
 end

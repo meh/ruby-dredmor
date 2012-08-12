@@ -208,7 +208,7 @@ class Dredmor
 			instance_variable_set "@#{name}", Unified.const_get(name.capitalize).new(self)
 		end
 
-		alias_method "#{name}!" name
+		alias_method "#{name}!", name
 	}
 
 	def inspect

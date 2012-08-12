@@ -45,7 +45,7 @@ class Items
 		@misc      = []
 
 		if xml = game.read_xml('itemDB')
-			xml.xpath('//item').each {|xml|
+			xml.css('item').each {|xml|
 				if xml.at('food')
 					@foods << Food.new(game, xml)
 				elsif xml.at('potion')
@@ -83,6 +83,7 @@ class Items
 		else
 			each(:reagent, &block)
 			each(:food, &block)
+			each(:potion, &block)
 			each(:mushroom, &block)
 			each(:gem, &block)
 			each(:trap, &block)
@@ -104,6 +105,10 @@ class Items
 
 	def misc (&block)
 		each(:misc, &block)
+	end
+
+	def [] (name)
+		find { |i| name === i.name }
 	end
 end
 

@@ -8,23 +8,29 @@
 #  0. You just DO WHAT THE FUCK YOU WANT TO.
 #++
 
-class Dredmor; class Items
+class Dredmor; class Unified
 
-class Toolkit < Item
-	attr_reader :type
+class Skills < Unified
+	include Enumerable
 
-	def initialize (game, xml)
-		super
+	def each (&block)
+		return to_enum unless block
 
-		@type = xml.at('toolkit')[:tag].to_sym
+		game.each {|part|
+			part.skills.each(&block)
+		}
+
+		self
 	end
 
-	def craft (&block)
-		game.recipes!.crafting.each(type, &block)
-	end
+	def [] (name_or_id)
+		game.each {|part|
+			if skill = part.skills[name_or_id]
+				return skill
+			end
+		}
 
-	def encrusts (&block)
-		game.recipes!.encrusting.each(type, &block)
+		nil
 	end
 end
 

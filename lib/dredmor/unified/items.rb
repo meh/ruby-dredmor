@@ -8,16 +8,10 @@
 #  0. You just DO WHAT THE FUCK YOU WANT TO.
 #++
 
-class Dredmor; module Unified
+class Dredmor; class Unified
 
-class Items
+class Items < Unified
 	include Enumerable
-
-	attr_reader :game
-
-	def initialize (game)
-		@game = game
-	end
 
 	def each (what = nil, &block)
 		return enum_for :each, what unless block
@@ -37,6 +31,16 @@ class Items
 
 	def misc (&block)
 		each(:misc, &block)
+	end
+
+	def [] (name)
+		game.each {|part|
+			if item = part.items[name]
+				return item
+			end
+		}
+
+		nil
 	end
 end
 

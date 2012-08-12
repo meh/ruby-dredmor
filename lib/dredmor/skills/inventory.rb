@@ -18,7 +18,7 @@ class Inventory
 		@skill = skill
 
 		@always = xml[:always] == '1'
-		@item   = game.items!.grep(xml[:subtype])
+		@item   = game.items![xml[:subtype]]
 		@amount = (xml[:amount] || 1).to_i
 	end
 

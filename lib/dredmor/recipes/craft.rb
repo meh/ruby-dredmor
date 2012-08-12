@@ -17,10 +17,12 @@ class Craft < Recipe
 		@name = xml.css('output').min_by { |o| o[:skill].to_i }[:name]
 
 		@output = Output.new(self, xml)
-		@input  = xml.css('input').map {|x| game.items!.grep(x[:name]) }
+		@input  = xml.css('input').map {|x| game.items![x[:name]] }
 	end
 
 	class Output
+		include Enumerable
+
 		attr_reader :game, :recipe, :required_level
 
 		def initialize (recipe, xml)
@@ -31,14 +33,22 @@ class Craft < Recipe
 
 			last    = nil
 			@levels = xml.css('output').sort_by { |o| o[:skill].to_i }.reverse.map {|xml|
-				Level.new(self, xml, xml[:skill].to_i, last)
-
-				last = xml[:skill].to_i
+				Level.new(self, xml, xml[:skill].to_i, last).tap {
+					last = xml[:skill].to_i
+				}
 			}.reverse
 		end
 
+		def each (&block)
+			return to_enum unless block
+
+			@levels.each(&block)
+
+			self
+		end
+
 		def for_level (n)
-			@levels.find { |l| l === n }
+			find { |l| l === n }
 		end
 
 		class Level
@@ -52,7 +62,11 @@ class Craft < Recipe
 				@low  = low
 				@high = high
 
-				@item   = game.items!.grep(xml[:name])
+				unless @item   = game.items![xml[:name]]
+					puts xml[:name]
+				end
+
+
 				@amount = (xml[:amount] || 1).to_i
 			end
 

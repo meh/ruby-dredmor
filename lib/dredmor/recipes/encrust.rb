@@ -20,7 +20,7 @@ class Encrust < Recipe
 		@description = xml.at('description')[:text]
 
 		@output = Output.new(self, xml)
-		@input  = xml.css('input').map {|x| game.items.grep(x[:name]) }
+		@input  = xml.css('input').map { |x| game.items![x[:name]] }
 	end
 
 	class Output
@@ -35,12 +35,15 @@ class Encrust < Recipe
 			@inscription = xml.at('encrustwith')[:name]
 			@required_level = xml.at('skill')[:level].to_i
 			@instability    = xml.at('instability')[:amount].to_i
-			@power          = game.powers![xml.at('power')[:name]]
 
-			if chance = xml.at('power')[:chance]
-				@chance = (chance.to_f * 100).to_i
-			else
-				@chance = 100
+			if power = xml.at('power')
+				@power = game.powers![power[:name]]
+
+				if chance = power[:chance]
+					@chance = (chance.to_f * 100).to_i
+				else
+					@chance = 100
+				end
 			end
 
 			from_xml(xml)

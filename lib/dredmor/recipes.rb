@@ -50,16 +50,16 @@ class Recipes
 		self
 	end
 
-	def crafts (tool = nil, &block)
-		return enum_for :crafts, tool unless block
+	def crafting (tool = nil, &block)
+		return enum_for :crafting, tool unless block
 
 		each(tool) {|recipe|
 			block.call(recipe) if recipe.is_a? Craft
 		}
 	end
 
-	def encrusts (tool = nil, &block)
-		return enum_for :encrusts, tool unless block
+	def encrusting (tool = nil, &block)
+		return enum_for :encrusting, tool unless block
 
 		each(tool) {|recipe|
 			block.call(recipe) if recipe.is_a? Encrust
@@ -72,7 +72,7 @@ class Recipes
 				name === c.name
 			else
 				name === c.name || c.output.any? {|o|
-					name === o.name
+					name === o.item.name
 				}
 			end
 		}

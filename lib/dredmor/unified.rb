@@ -10,13 +10,19 @@
 
 class Dredmor
 
-module Unified
+class Unified
 	autoload :Items, 'dredmor/unified/items'
 	autoload :Powers, 'dredmor/unified/powers'
 	autoload :Recipes, 'dredmor/unified/recipes'
 	autoload :Monsters, 'dredmor/unified/monsters'
 	autoload :Skills, 'dredmor/unified/skills'
 	autoload :Spells, 'dredmor/unified/spells'
+
+	attr_reader :game
+
+	def initialize (game)
+		@game = game
+	end
 end
 
 end

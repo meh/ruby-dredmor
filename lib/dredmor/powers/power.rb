@@ -11,14 +11,14 @@
 class Dredmor; class Powers
 
 class Power
-	attr_reader :game, :name, :description
+	attr_reader :game, :name, :description, :effect
 
 	def initialize (game, xml)
 		@game = game
 
 		@name        = xml[:name]
 		@description = xml[:description]
-		@effect      = game.spells[xml[:spell]]
+		@effect      = game.spells![xml[:spell]]
 		@unstable    = xml.name == 'unstableEffect'
 	end
 

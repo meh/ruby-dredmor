@@ -16,7 +16,7 @@ class Potion < Item
 	def initialize (game, xml)
 		super
 
-		@effect = game.spells[xml[:spell]]
+		@effect = game.spells![xml[:spell]]
 	end
 end
 

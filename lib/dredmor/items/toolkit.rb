@@ -19,12 +19,12 @@ class Toolkit < Item
 		@type = xml.at('toolkit')[:tag].to_sym
 	end
 
-	def craftings (&block)
-		game.craftings.each(type, &block)
+	def craft (&block)
+		game.recipes!.crafts.each(type, &block)
 	end
 
-	def encrustings (&block)
-		game.encrustings.each(type, &block)
+	def encrusts (&block)
+		game.recipes!.encrusts.each(type, &block)
 	end
 end
 

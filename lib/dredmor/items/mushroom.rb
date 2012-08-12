@@ -16,7 +16,7 @@ class Mushroom < Item
 	def initialize (game, xml)
 		super
 
-		@effect = game.spells[xml.at('casts')[:spell]]
+		@effect = game.spells![xml.at('casts')[:spell]]
 	end
 end
 

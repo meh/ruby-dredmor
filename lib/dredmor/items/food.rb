@@ -22,7 +22,7 @@ class Food < Item
 		@vegan = xml.at('food')[:meat] != '1'
 
 		if effect = xml.at('food')[:effect]
-			@effect = game.spells[effect]
+			@effect = game.spells![effect]
 		end
 	end
 

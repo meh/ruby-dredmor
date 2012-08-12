@@ -9,7 +9,6 @@
 #++
 
 require 'nokogiri'
-require 'base64'
 
 require 'dredmor/version'
 require 'dredmor/helpers'
@@ -43,17 +42,21 @@ class Dredmor
 			@game = game
 		end
 
+		def path
+			@game.path
+		end
+
 		def read_xml (name)
-			Nokogiri::XML.parse(File.read("#{path}/game/#{name}.xml"))
+			Nokogiri::XML.parse(File.read("#{path}/game/#{name[/^(.+?)(\.xml)?$/, 1]}.xml"))
 		rescue
 			nil
 		end
 
 		def read_icon (name)
-			path = "#{path}/#{name}.png"
+			path = "#{path}/#{name[/^(.+?)(\.png)?$/, 1]}.png"
 
-			file = File.new(name, 'r:binary')
-			icon = Icon.new(file.read, "#{path}/#{name}.png")
+			file = File.new(path, 'r:binary')
+			icon = Icon.new(file.read, path)
 			file.close
 
 			icon
@@ -75,6 +78,10 @@ class Dredmor
 
 				instance_variable_set "@#{name}", Dredmor.const_get(name.capitalize).new(self)
 			end
+
+			define_method "#{name}!" do
+				game.__send__ name
+			end
 		}
 	end
 
@@ -94,14 +101,14 @@ class Dredmor
 		end
 
 		def read_icon (name)
-			["#{path}/#{name}.png", "#{game.path}/#{name}.png"].each {|path|
+			["#{path}/#{name[/^(.+?)(\.png)?$/, 1]}.png", "#{game.path}/#{name[/^(.+?)(\.png)?$/, 1]}.png"].each {|path|
 				next unless File.readable?(path)
 
 				file = File.new(path, 'r:binary')
 				icon = Icon.new(file.read, path)
 				file.close
 
-				return file
+				return icon
 			}
 
 			nil
@@ -166,6 +173,8 @@ class Dredmor
 
 		private :read
 	end
+	
+	include Enumerable
 
 	attr_reader :path, :core, :expansions, :mods
 
@@ -177,10 +186,30 @@ class Dredmor
 			Expansion.new(self, Expansion::ByNumber[(File.basename(path)[/\d+$/] || 1).to_i], path)
 		}.compact.freeze
 
-		@mods = mod_path ? Dir["#{mod_path}/*"].map {|path|
+		@mods = mod_path.nil? ? [] : Dir["#{mod_path}/*"].map {|path|
 			Mod.new(self, path)
-		}.compact.freeze : []
+		}.compact.freeze
 	end
+
+	def each (&block)
+		return to_enum unless block
+
+		block.call(core)
+		expansions.each(&block)
+		mods.each(&block)
+
+		self
+	end
+
+	%w[items powers recipes monsters skills spells].each {|name|
+		define_method name do
+			return instance_variable_get "@#{name}" if instance_variable_defined? "@#{name}"
+
+			instance_variable_set "@#{name}", Unified.const_get(name.capitalize).new(self)
+		end
+
+		alias_method "#{name}!" name
+	}
 
 	def inspect
 		"#<Dredmor#{"(#{expansions.map(&:name).join(', ')})" unless expansions.empty?}: #{path.inspect}>"

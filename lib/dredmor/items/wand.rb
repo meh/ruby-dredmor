@@ -17,7 +17,7 @@ class Wand < Item
 		super
 
 		@charges = Range.new(xml.at('wand')[:mincharge].to_i, xml.at('wand')[:maxcharge].to_i)
-		@effect  = game.spells[xml.at('wand')[:spell]]
+		@effect  = game.spells![xml.at('wand')[:spell]]
 	end
 end
 

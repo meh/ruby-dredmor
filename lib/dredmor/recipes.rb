@@ -50,8 +50,32 @@ class Recipes
 		self
 	end
 
-	def recipe_for (name)
-		find { |c| c.result.name == recipe }
+	def crafts (tool = nil, &block)
+		return enum_for :crafts, tool unless block
+
+		each(tool) {|recipe|
+			block.call(recipe) if recipe.is_a? Craft
+		}
+	end
+
+	def encrusts (tool = nil, &block)
+		return enum_for :encrusts, tool unless block
+
+		each(tool) {|recipe|
+			block.call(recipe) if recipe.is_a? Encrust
+		}
+	end
+
+	def [] (name)
+		find {|c|
+			if c.is_a? Encrust
+				name === c.name
+			else
+				name === c.name || c.output.any? {|o|
+					name === o.name
+				}
+			end
+		}
 	end
 end
 

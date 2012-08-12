@@ -8,33 +8,43 @@
 #  0. You just DO WHAT THE FUCK YOU WANT TO.
 #++
 
-class Dredmor; class Crafts
+class Dredmor; class Recipes
 
 class Encrust < Recipe
-	include WithBuffs
-
-	attr_reader :result, :required, :instability, :power, :description, :encrust
+	attr_reader :description
 
 	def initialize (game, xml)
 		super
 
-		@name     = xml[:name]
-		@required = Required.new(
-			xml.css('input').map { |x| game.items.find { |i| i.name == x[:name] } },
-			xml.at('skill')[:level].to_i
-		)
-
-		@instability = xml.at('instability')[:amount].to_i
-		@power       = game.powers[xml.at('power')[:name]]
-
-		if chance = xml.at('power')[:chance]
-			@chance = (chance.to_f * 100).to_i
-		else
-			@chance = 100
-		end
-
+		@name        = xml[:name]
 		@description = xml.at('description')[:text]
-		@encrust     = xml.at('encrustwith')[:name]
+
+		@output = Output.new(self, xml)
+		@input  = xml.css('input').map {|x| game.items.grep(x[:name]) }
+	end
+
+	class Output
+		include WithBuffs
+
+		attr_reader :game, :recipe, :inscription, :required_level
+
+		def initialize (recipe, xml)
+			@game   = recipe.game
+			@recipe = recipe
+
+			@inscription = xml.at('encrustwith')[:name]
+			@required_level = xml.at('skill')[:level].to_i
+			@instability    = xml.at('instability')[:amount].to_i
+			@power          = game.powers![xml.at('power')[:name]]
+
+			if chance = xml.at('power')[:chance]
+				@chance = (chance.to_f * 100).to_i
+			else
+				@chance = 100
+			end
+
+			from_xml(xml)
+		end
 	end
 end
 

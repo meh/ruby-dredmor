@@ -20,7 +20,7 @@ class Trap < Item
 
 		@level  = xml[:level].to_i
 		@once   = xml.at('trap')[:trigger] == 'once'
-		@effect = game.spells[xml.at('trap')[:casts]]
+		@effect = game.spells![xml.at('trap')[:casts]]
 
 		if origin = xml.at('trap')[:origin]
 			@origin = Origin.new(self, game.read_icon(origin),

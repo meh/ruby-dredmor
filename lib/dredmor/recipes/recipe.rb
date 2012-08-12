@@ -11,26 +11,16 @@
 class Dredmor; class Recipes
 
 class Recipe
-	Required = Struct.new(:items, :level)
-
-	attr_reader :game, :toolkit, :required, :name
+	attr_reader :game, :toolkit, :name, :input, :output
 
 	def initialize (game, xml)
 		@game    = game
-		@toolkit = game.items.toolkits.find { |t| t.type == xml.at('tool')[:tag].to_sym }
+		@toolkit = game.items!.toolkits.find { |t| t.type == xml.at('tool')[:tag].to_sym }
 		@secret  = xml[:hidden] == '1'
 	end
 
 	def secret?
 		@secret
-	end
-
-	def craft?
-		is_a? Craft
-	end
-
-	def encrust?
-		is_a? Encrust
 	end
 end
 

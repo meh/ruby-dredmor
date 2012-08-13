@@ -8,18 +8,21 @@
 #  0. You just DO WHAT THE FUCK YOU WANT TO.
 #++
 
-class Dredmor; class TextDatabase
+class Dredmor; class Texts
 
-class Architecture < Text
-	attr_reader :plural
+class Text
+	attr_reader :game
 
-	def initialize (game, xml)
-		super(game, xml[:text])
-
-		@plural = xml[:plural].freeze
+	def initialize (game, string)
+		@game  = game
+		@value = string.freeze
 	end
 
-	alias singular to_s
+	def to_s
+		@value
+	end
+
+	alias to_str to_s
 end
 
 end; end

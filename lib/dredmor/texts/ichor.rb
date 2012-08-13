@@ -8,21 +8,12 @@
 #  0. You just DO WHAT THE FUCK YOU WANT TO.
 #++
 
-class Dredmor; class TextDatabase
+class Dredmor; class Texts
 
-class Text
-	attr_reader :game
-
-	def initialize (game, string)
-		@game  = game
-		@value = string.freeze
+class Ichor < Text
+	def initialize (game, xml)
+		super(game, xml[:text])
 	end
-
-	def to_s
-		@value
-	end
-
-	alias to_str to_s
 end
 
 end; end

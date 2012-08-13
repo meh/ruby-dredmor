@@ -10,14 +10,14 @@
 
 class Dredmor; class Unified
 
-class TextDatabase < Unified
+class Texts < Unified
 	include Enumerable
 
 	def each (what = nil, &block)
 		return enum_for :each, what unless block
 
 		game.each {|part|
-			part.text_database.each(what, &block)
+			part.texts.each(what, &block)
 		}
 
 		self

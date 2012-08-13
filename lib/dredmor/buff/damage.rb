@@ -79,7 +79,7 @@ class Damage < Buff
 		end
 
 		def description
-			game.text_database!.tooltips.find { |t| t.panel == :damages && t.name.to_sym == name }
+			game.texts!.tooltips.find { |t| t.panel == :damages && t.name.to_sym == name }
 		end
 
 		def armor?

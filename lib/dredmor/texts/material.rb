@@ -8,17 +8,11 @@
 #  0. You just DO WHAT THE FUCK YOU WANT TO.
 #++
 
-class Dredmor; class TextDatabase
+class Dredmor; class Texts
 
-class Phoneme < Text
-	def initialize (game, xml, start = false)
+class Material < Text
+	def initialize (game, xml)
 		super(game, xml[:text])
-
-		@start = start
-	end
-
-	def start?
-		@start
 	end
 end
 

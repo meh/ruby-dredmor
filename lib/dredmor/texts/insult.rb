@@ -8,9 +8,9 @@
 #  0. You just DO WHAT THE FUCK YOU WANT TO.
 #++
 
-class Dredmor; class TextDatabase
+class Dredmor; class Texts
 
-class Adjective < Text
+class Insult < Text
 	def initialize (game, xml)
 		super(game, xml[:text])
 	end

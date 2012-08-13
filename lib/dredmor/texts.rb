@@ -8,26 +8,26 @@
 #  0. You just DO WHAT THE FUCK YOU WANT TO.
 #++
 
-require 'dredmor/text_database/text'
-require 'dredmor/text_database/tooltip'
-require 'dredmor/text_database/quality'
-require 'dredmor/text_database/material'
-require 'dredmor/text_database/decoration'
-require 'dredmor/text_database/phoneme'
-require 'dredmor/text_database/noun'
-require 'dredmor/text_database/adjective'
-require 'dredmor/text_database/ichor'
-require 'dredmor/text_database/random'
-require 'dredmor/text_database/verb'
-require 'dredmor/text_database/architecture'
-require 'dredmor/text_database/insult'
-require 'dredmor/text_database/first_name'
-require 'dredmor/text_database/title'
-require 'dredmor/text_database/wizard_name'
+require 'dredmor/texts/text'
+require 'dredmor/texts/tooltip'
+require 'dredmor/texts/quality'
+require 'dredmor/texts/material'
+require 'dredmor/texts/decoration'
+require 'dredmor/texts/phoneme'
+require 'dredmor/texts/noun'
+require 'dredmor/texts/adjective'
+require 'dredmor/texts/ichor'
+require 'dredmor/texts/random'
+require 'dredmor/texts/verb'
+require 'dredmor/texts/architecture'
+require 'dredmor/texts/insult'
+require 'dredmor/texts/first_name'
+require 'dredmor/texts/title'
+require 'dredmor/texts/wizard_name'
 
 class Dredmor
 
-class TextDatabase
+class Texts
 	include Enumerable
 
 	attr_reader :game
@@ -154,20 +154,20 @@ class TextDatabase
 	end
 end
 
-Tooltip      = TextDatabase::Tooltip
-Quality      = TextDatabase::Quality
-Material     = TextDatabase::Material
-Decoration   = TextDatabase::Decoration
-Phoneme      = TextDatabase::Phoneme
-Noun         = TextDatabase::Noun
-Adjective    = TextDatabase::Adjective
-Ichor        = TextDatabase::Ichor
-Insult       = TextDatabase::Insult
-Random       = TextDatabase::Random
-Verb         = TextDatabase::Verb
-Architecture = TextDatabase::Architecture
-FirstName    = TextDatabase::FirstName
-Title        = TextDatabase::Title
-WizardName   = TextDatabase::WizardName
+Tooltip      = Texts::Tooltip
+Quality      = Texts::Quality
+Material     = Texts::Material
+Decoration   = Texts::Decoration
+Phoneme      = Texts::Phoneme
+Noun         = Texts::Noun
+Adjective    = Texts::Adjective
+Ichor        = Texts::Ichor
+Insult       = Texts::Insult
+Random       = Texts::Random
+Verb         = Texts::Verb
+Architecture = Texts::Architecture
+FirstName    = Texts::FirstName
+Title        = Texts::Title
+WizardName   = Texts::WizardName
 
 end

@@ -18,7 +18,7 @@ class Unified
 	autoload :Skills, 'dredmor/unified/skills'
 	autoload :Spells, 'dredmor/unified/spells'
 	autoload :TargetAreas, 'dredmor/unified/target_areas'
-	autoload :TextDatabase, 'dredmor/unified/text_database'
+	autoload :Texts, 'dredmor/unified/texts'
 	autoload :Scrolls, 'dredmor/unified/scrolls'
 
 	attr_reader :game

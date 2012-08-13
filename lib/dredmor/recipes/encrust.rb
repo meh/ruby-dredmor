@@ -23,6 +23,10 @@ class Encrust < Recipe
 		@input  = xml.css('input').map { |x| game.items![x[:name]] }
 	end
 
+	def initialize
+		"#<Dredmor::Recipe::Encrust(#{name}): #{description.inspect}>"
+	end
+
 	class Output
 		include WithBuffs
 
@@ -32,7 +36,7 @@ class Encrust < Recipe
 			@game   = recipe.game
 			@recipe = recipe
 
-			@inscription = xml.at('encrustwith')[:name]
+			@inscription    = xml.at('encrustwith')[:name]
 			@required_level = xml.at('skill')[:level].to_i
 			@instability    = xml.at('instability')[:amount].to_i
 

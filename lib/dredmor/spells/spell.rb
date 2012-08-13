@@ -11,7 +11,7 @@
 class Dredmor; class Spells
 
 class Spell
-	attr_reader :game, :type, :name, :description, :says, :icon
+	attr_reader :game, :name, :description, :logs, :icon, :effects
 
 	def initialize (game, xml)
 		@game = game
@@ -21,7 +21,7 @@ class Spell
 
 		if description = xml.at('description')
 			@description = description[:text]
-			@says        = description[:monsterText]
+			@logs        = description[:monsterText]
 		end
 
 		if xml[:icon]

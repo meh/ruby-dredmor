@@ -12,6 +12,7 @@ require 'dredmor/text_database/text'
 require 'dredmor/text_database/tooltip'
 require 'dredmor/text_database/quality'
 require 'dredmor/text_database/material'
+require 'dredmor/text_database/decoration'
 require 'dredmor/text_database/phoneme'
 require 'dredmor/text_database/noun'
 require 'dredmor/text_database/adjective'
@@ -34,20 +35,21 @@ class TextDatabase
 	def initialize (game)
 		@game = game
 
-		@tooltips     = []
-		@quality      = []
-		@materials    = []
-		@decorations  = []
-		@phonemes     = []
-		@nouns        = []
-		@adjectives   = []
-		@ichors       = []
-		@random       = []
-		@verbs        = []
-		@insults      = []
-		@first_names  = []
-		@titles       = []
-		@wizard_names = []
+		@tooltips      = []
+		@quality       = []
+		@materials     = []
+		@decorations   = []
+		@phonemes      = []
+		@nouns         = []
+		@adjectives    = []
+		@ichors        = []
+		@insults       = []
+		@random        = []
+		@verbs         = []
+		@architectures = []
+		@first_names   = []
+		@titles        = []
+		@wizard_names  = []
 
 		if xml = game.read_xml('text')
 			xml.xpath('//tooltip').each {|xml|
@@ -67,19 +69,19 @@ class TextDatabase
 			}
 
 			xml.xpath('//startPhoneme').each {|xml|
-				@decorations << Phoneme.new(game, xml, true)
+				@phonemes << Phoneme.new(game, xml, true)
 			}
 
 			xml.xpath('//phoneme').each {|xml|
-				@decorations << Phoneme.new(game, xml, false)
+				@phonemes << Phoneme.new(game, xml, false)
 			}
 
 			xml.xpath('//noun').each {|xml|
-				@decorations << Noun.new(game, xml)
+				@nouns << Noun.new(game, xml)
 			}
 
 			xml.xpath('//adjective').each {|xml|
-				@decorations << Adjective.new(game, xml)
+				@adjectives << Adjective.new(game, xml)
 			}
 
 			xml.xpath('//ichor').each {|xml|
@@ -95,23 +97,23 @@ class TextDatabase
 			}
 
 			xml.xpath('//verb').each {|xml|
-				@random << Verb.new(game, xml)
+				@verbs << Verb.new(game, xml)
 			}
 
 			xml.xpath('//architecture').each {|xml|
-				@random << Architecture.new(game, xml)
+				@architectures << Architecture.new(game, xml)
 			}
 
 			xml.xpath('//firstname').each {|xml|
-				@insults << FirstName.new(game, xml)
+				@first_names << FirstName.new(game, xml)
 			}
 
 			xml.xpath('//title').each {|xml|
-				@insults << Title.new(game, xml)
+				@titles << Title.new(game, xml)
 			}
 
 			xml.xpath('//wizardname').each {|xml|
-				@insults << WizardName.new(game, xml)
+				@wizard_names << WizardName.new(game, xml)
 			}
 		end
 	end

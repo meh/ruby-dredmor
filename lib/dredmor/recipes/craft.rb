@@ -20,6 +20,10 @@ class Craft < Recipe
 		@input  = xml.css('input').map {|x| game.items![x[:name]] }
 	end
 
+	def inspect
+		"#<Dredmor::Recipe::Craft(#{name}): #{input.join(', ')}>"
+	end
+
 	class Output
 		include Enumerable
 
@@ -51,8 +55,12 @@ class Craft < Recipe
 			find { |l| l === n }
 		end
 
+		def inspect
+			"#<Dredmor::Recipe::Output: #{map(&:inspect).join ', '}>"
+		end
+
 		class Level
-			attr_reader :game, :recipe, :output, :item, :amount
+			attr_reader :game, :recipe, :output, :item, :amount, :low, :high
 
 			def initialize (output, xml, low, high = nil)
 				@game   = output.game
@@ -62,11 +70,7 @@ class Craft < Recipe
 				@low  = low
 				@high = high
 
-				unless @item   = game.items![xml[:name]]
-					puts xml[:name]
-				end
-
-
+				@item   = game.items![xml[:name]]
 				@amount = (xml[:amount] || 1).to_i
 			end
 
@@ -79,6 +83,10 @@ class Craft < Recipe
 			end
 
 			alias <=> ===
+
+			def inspect
+				"#<Dredmor::Recipe::Level(#{low}): #{"#{amount} " if amount != 1}#{item.inspect}>"
+			end
 		end
 	end
 end

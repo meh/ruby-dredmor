@@ -9,6 +9,8 @@
 #++
 
 require 'dredmor/spells/spell'
+require 'dredmor/spells/buff'
+require 'dredmor/spells/effect'
 require 'dredmor/spells/probability'
 
 class Dredmor

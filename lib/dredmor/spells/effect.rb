@@ -8,14 +8,15 @@
 #  0. You just DO WHAT THE FUCK YOU WANT TO.
 #++
 
-class String
-	def to_class_name
-		capitalize.gsub(/_(.)/) { |c| $1.upcase }
+class Dredmor; class Spells
+
+class Effect
+	attr_reader :game, :spell
+
+	def initialize (spell, xml)
+		@game  = spell.game
+		@spell = spell
 	end
 end
 
-class Symbol
-	def to_class_name
-		to_s.to_class_name.to_sym
-	end
-end
+end; end

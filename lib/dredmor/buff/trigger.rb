@@ -8,15 +8,21 @@
 #  0. You just DO WHAT THE FUCK YOU WANT TO.
 #++
 
-class Dredmor; class Spells
+class Dredmor; class Buff
 
-class Probability
-	attr_reader :spell, :after
+class Trigger
+	attr_reader :game, :after, :taxa
 
-	def initialize (spell, percentage, after = 0)
-		@spell      = spell
+	def initialize (game, spell_name, percentage, after = 0, taxa = nil)
+		@game       = game
+		@spell      = spell_name
 		@percentage = percentage.to_i
 		@after      = after
+		@taxa       = taxa.downcase.to_sym if taxa
+	end
+
+	def spell
+		game.spells![@spell]
 	end
 
 	def to_i
@@ -28,7 +34,7 @@ class Probability
 	end
 
 	def inspect
-		"#<Dredmor::Probability(#{to_i}%#{", after #{after}" if after}): #{spell.inspect}>"
+		"#<Dredmor::Buff::Trigger(#{to_i}%#{", after #{after}" if after}): #{spell.inspect}>"
 	end
 end
 

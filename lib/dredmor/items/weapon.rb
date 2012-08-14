@@ -79,7 +79,7 @@ class Weapon < Item
 			super
 
 			if hit = xml.at('weapon')[:hit]
-				on(:hit) << Spells::Probability.new(game.spells![hit], 100)
+				on(:hit) << Spells::Probability.new(game, hit, 100)
 			end
 
 			if thrown = xml.at('weapon')[:thrown]

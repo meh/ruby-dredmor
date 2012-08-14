@@ -12,9 +12,9 @@ class Dredmor; class Items
 
 class Armour < Item
 	def self.new (game, xml)
-		return super unless self == Weapon
+		return super unless self == Armour
 
-		const_get(xml[:type].capitalize).new(game, xml)
+		const_get(xml[:type].to_class_name).new(game, xml)
 	end
 
 	include WithBuffs

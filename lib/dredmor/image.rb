@@ -33,10 +33,7 @@ class Image
 	end
 end
 
-class Icon < Image
-end
-
-class Sprite
+class Animation
 	include Enumerable
 
 	def initialize (frames)

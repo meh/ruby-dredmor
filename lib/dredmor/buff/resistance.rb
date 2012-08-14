@@ -56,7 +56,7 @@ class Resistance < Buff
 
 			name, xml = args
 
-			unless const = Resistance.const_get(name.to_sym.capitalize) rescue false
+			unless const = Resistance.const_get(name.to_class_name) rescue false
 				raise ArgumentError, "#{name} unknown resistance type"
 			end
 			
@@ -95,7 +95,7 @@ class Resistance < Buff
 		end
 
 		def inspect
-			"#<Dredmor::Resistance::#{name.capitalize}: #{to_f}>"
+			"#<Dredmor::Resistance::#{name.to_class_name}: #{to_f}>"
 		end
 	end
 

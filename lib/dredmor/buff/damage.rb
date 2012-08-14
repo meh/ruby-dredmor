@@ -56,7 +56,7 @@ class Damage < Buff
 
 			name, xml = args
 
-			unless const = Damage.const_get(name.to_sym.capitalize) rescue false
+			unless const = Damage.const_get(name.to_class_name) rescue false
 				raise ArgumentError, "#{name} unknown damage type"
 			end
 			
@@ -95,7 +95,7 @@ class Damage < Buff
 		end
 
 		def inspect
-			"#<Dredmor::Damage::#{name.capitalize}: #{to_f}>"
+			"#<Dredmor::Damage::#{name.to_class_name}: #{to_f}>"
 		end
 	end
 

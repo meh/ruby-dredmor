@@ -12,13 +12,13 @@ require 'nokogiri'
 
 require 'dredmor/version'
 require 'dredmor/helpers'
+require 'dredmor/buff'
 
 class Dredmor
 	autoload :Unified, 'dredmor/unified'
 
 	autoload :Image, 'dredmor/image'
-	autoload :Icon, 'dredmor/image'
-	autoload :Sprite, 'dredmor/image'
+	autoload :Animation, 'dredmor/image'
 
 	autoload :Buff, 'dredmor/buff'
 	autoload :Damage, 'dredmor/buff'
@@ -59,7 +59,7 @@ class Dredmor
 			path = "#{path}/#{name[/^(.+?)(\.png)?$/, 1]}.png"
 
 			file = File.new(path, 'r:binary')
-			icon = Icon.new(file.read, path)
+			icon = Image.new(file.read, path)
 			file.close
 
 			icon
@@ -106,7 +106,7 @@ class Dredmor
 				next unless File.readable?(path)
 
 				file = File.new(path, 'r:binary')
-				icon = Icon.new(file.read, path)
+				icon = Image.new(file.read, path)
 				file.close
 
 				return icon
@@ -131,15 +131,17 @@ class Dredmor
 				@zip = Zip::ZipFile.new(path)
 			end
 
-			read_xml('mod').tap {|xml|
-				@name        = xml.at('name')[:text]
-				@version     = xml.at('revision')[:text]
-				@description = xml.at('description')[:text]
+			if xml = read_xml('mod')
+				xml.tap {|xml|
+					@name        = xml.at('name')[:text]
+					@version     = xml.at('revision')[:text]
+					@description = xml.at('description')[:text]
 
-				xml.css('require').each {|element|
-					@requires.push(Expansion::ByNumber[element[:expansion].to_i])
+					xml.css('require').each {|element|
+						@requires.push(Expansion::ByNumber[element[:expansion].to_i])
+					}
 				}
-			}
+			end
 		end
 
 		def read_xml (name)
@@ -149,7 +151,7 @@ class Dredmor
 		end
 
 		def read_icon (name)
-			Icon.new(read("#{name[/^(.+?)(\.png)?$/, 1]}.png", :binary), "#{name[/^(.+?)(\.png)?$/, 1]}.png")
+			Image.new(read("#{name[/^(.+?)(\.png)?$/, 1]}.png", :binary), "#{name[/^(.+?)(\.png)?$/, 1]}.png")
 		rescue
 			nil
 		end
@@ -187,9 +189,14 @@ class Dredmor
 			Expansion.new(self, Expansion::ByNumber[(File.basename(path)[/\d+$/] || 1).to_i], path)
 		}.compact.freeze
 
-		@mods = mod_path.nil? ? [] : Dir["#{mod_path}/*"].map {|path|
-			Mod.new(self, path)
-		}.compact.freeze
+		@mods = []
+		Dir["#{mod_path}/*"].each {|path|
+			load_mod(path)
+		}
+	end
+
+	def load_mod (path)
+		@mods << Mod.new(self, path)
 	end
 
 	def each (&block)

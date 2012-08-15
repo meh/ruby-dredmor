@@ -20,7 +20,7 @@ class Resistance < Buff
 		if xml
 			xml.attribute_nodes.each {|attr|
 				begin
-					@types << Type.new(game, attr.name, attr.value.to_f)
+					@types << Type.new(game, attr.name, attr.value.to_f, xml["#{attr.name}F"].to_f)
 				rescue ArgumentError; end
 			}
 		end
@@ -34,19 +34,19 @@ class Resistance < Buff
 		to_f <=> other.to_f
 	end
 
-	def to_f
-		@types.map(&:to_f).reduce(0, :+)
+	def to_f (*args)
+		@types.map { |t| t.to_f(*args) }.reduce(0, :+)
 	end
 
-	def to_i
-		to_f.to_i
+	def to_i (*args)
+		to_f(*args).to_i
 	end
 
-	def inspect
+	def inspect (*args)
 		if @types.empty?
 			"#<Dredmor::Resistance: it is futile>"
 		else
-			"#<Dredmor::Resistance(#{map(&:name).join(', ')}): #{to_f}>"
+			"#<Dredmor::Resistance(#{map(&:name).join(', ')}): #{to_f(*args)}>"
 		end
 	end
 
@@ -63,12 +63,13 @@ class Resistance < Buff
 			const.new(game, xml)
 		end
 
-		attr_reader :game, :icon
+		attr_reader :game, :icon, :scale
 
-		def initialize (game, amount)
+		def initialize (game, amount, scale = 0.0)
 			@game = game
 
 			@amount = amount.to_f
+			@scale  = scale
 			@armor  = false
 		end
 
@@ -86,12 +87,12 @@ class Resistance < Buff
 			@armor
 		end
 
-		def to_f
-			@amount
+		def to_f (primary = 0, secondary = 0)
+			@amount + (@scale * primary) + (@scale * secondary)
 		end
 
-		def to_i
-			to_f.to_i
+		def to_i (*args)
+			to_f(*args).to_i
 		end
 
 		def inspect

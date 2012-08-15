@@ -11,18 +11,18 @@
 class Dredmor; class Buff
 
 class Trigger
-	attr_reader :game, :after, :taxa
+	attr_reader :game, :after, :affects
 
-	def initialize (game, spell_name, percentage, after = 0, taxa = nil)
+	def initialize (game, spell_name, percentage, after = 0, affects = nil)
 		@game       = game
-		@spell      = spell_name
+		@spell_name = spell_name
 		@percentage = percentage.to_i
 		@after      = after
-		@taxa       = taxa.downcase.to_sym if taxa
+		@affects    = affects ? affects.downcase.to_sym : :everyone
 	end
 
 	def spell
-		game.spells![@spell]
+		@spell ||= game.spells![@spell_name]
 	end
 
 	def to_i

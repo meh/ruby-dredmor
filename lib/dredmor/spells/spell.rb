@@ -17,6 +17,32 @@ class Spell
 		const_get(constants.find { |c| c.to_s.downcase == xml[:type] }).new(game, xml)
 	end
 
+	class Requirements
+		attr_reader :minimum, :bonus
+
+		def initialize (amount, minimum = 0.0, bonus = 0.0)
+			@amount  = amount
+			@minimum = minimum
+			@bonus   = bonus
+		end
+
+		def cost (savvy = 0.0)
+			if (result = to_f - (savvy * bonus)) > minimum
+				return result
+			end
+
+			minimum
+		end
+
+		def to_f
+			@amount
+		end
+
+		def to_i
+			to_f.to_i
+		end
+	end
+
 	attr_reader :game, :name, :description, :text, :icon, :requirements, :buff, :effects
 
 	def initialize (game, xml)
@@ -59,32 +85,6 @@ class Spell
 
 	def inspect
 		"#<Dredmor::Spell(#{name})>"
-	end
-
-	class Requirements
-		attr_reader :minimum, :bonus
-
-		def initialize (amount, minimum = 0.0, bonus = 0.0)
-			@amount  = amount
-			@minimum = minimum
-			@bonus   = bonus
-		end
-
-		def cost (savvy = 0.0)
-			if (result = to_f - (savvy * bonus)) > minimum
-				return result
-			end
-
-			minimum
-		end
-
-		def to_f
-			@amount
-		end
-
-		def to_i
-			to_f.to_i
-		end
 	end
 
 	class Adjacent < Spell
